@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Token Radar — pre-token protocols ranked by implied launch value</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="top">
+  <div>
+    <h1>TOKEN RADAR</h1>
+    <p class="sub">Pre-token protocols, ranked by what a launch would be worth — and how to farm each one.</p>
+  </div>
+  <div class="stats" id="stats"></div>
+</header>
+
+<section class="controls">
+  <input id="q" type="search" placeholder="Search a protocol…" aria-label="Search">
+  <select id="cat" aria-label="Category"><option value="">All categories</option></select>
+  <select id="chain" aria-label="Chain"><option value="">All chains</option></select>
+  <label class="chk"><input id="wl" type="checkbox"> Watchlist only</label>
+  <select id="sort" aria-label="Sort">
+    <option value="value">Sort: implied value</option>
+    <option value="tvl">Sort: TVL</option>
+    <option value="growth">Sort: 7d growth</option>
+    <option value="age">Sort: longest with no token</option>
+  </select>
+</section>
+
+<main>
+  <section class="board">
+    <table>
+      <thead><tr>
+        <th class="r">#</th><th>Protocol</th><th>Category</th><th>Chains</th>
+        <th class="r">TVL</th><th class="r">7d</th><th class="r">No token for</th><th class="r">Implied value</th>
+      </tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <p class="count" id="count"></p>
+  </section>
+
+  <section class="detail" id="detail" hidden></section>
+
+  <section class="model">
+    <h2>How the value is modelled</h2>
+    <p>Implied value = <b>TVL &times; category multiple &times; growth &times; age</b>. The multiple is the
+    median mcap/TVL of the tokenized protocols in the same category, computed from this snapshot
+    (global median when a category has fewer than four tokenized peers). Growth is
+    1 + clamp(7-day TVL change, &minus;40%, +80%) / 200. Age is 1 + min(years listed with no token, 6) &times; 0.06.
+    No protocol name is hardcoded anywhere: the board is derived from the snapshot&rsquo;s own figures, so
+    re-running it on a new snapshot finds the next launches on its own.</p>
+    <h3>Comparables — tokenized protocols the multiples come from</h3>
+    <table class="comp"><thead><tr>
+      <th>Protocol</th><th>Category</th><th class="r">TVL</th><th class="r">Market cap</th><th class="r">mcap / TVL</th>
+    </tr></thead><tbody id="comps"></tbody></table>
+    <p class="note">A protocol &ldquo;records no token&rdquo; in the snapshot. That is the record, not proof it
+    has none: a protocol on this board may still have a token its DefiLlama record does not carry.</p>
+  </section>
+</main>
+
+<footer>
+  <p>Snapshot: DefiLlama protocol data, as of <span id="asof"></span>. Board: 200 protocols — the full
+  watchlist plus the early protocols below the $50M floor that pass the same no-token / not-wrapped rule.</p>
+</footer>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
